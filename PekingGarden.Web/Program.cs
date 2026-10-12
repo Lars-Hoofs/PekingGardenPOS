@@ -1,26 +1,32 @@
+using PekingGarden.DAL;
+using PekingGarden.Logic.Interfaces;
+using PekingGarden.Logic.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+string connectionString = builder.Configuration.GetConnectionString("PekingGarden")
+                          ?? throw new InvalidOperationException("Connection string 'PekingGarden' is missing. Set it with dotnet user-secrets.");
+
+builder.Services.AddScoped<ITableRepository>(provider => new TableRepository(connectionString));
+builder.Services.AddScoped<IOrderRepository>(provider => new OrderRepository(connectionString));
+
+builder.Services.AddScoped<TableService>();
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-
 app.UseRouting();
-
-app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorPages()
-   .WithStaticAssets();
+    .WithStaticAssets();
 
 app.Run();

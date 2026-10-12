@@ -1,0 +1,38 @@
+@page
+@model PekingGarden.Web.Pages.Tables.IndexModel
+@{
+    ViewData["Title"] = "Tafels";
+    ViewData["AppClass"] = "geen-paneel";
+    ViewData["Nav"] = "tables";
+}
+
+<main class="mid">
+    <div class="pagkop">
+        <div>
+            <h1>Tafels</h1>
+            <p>@Model.Tables.Count tafels · @Model.OpenCount open</p>
+        </div>
+    </div>
+    <partial name="_Message" />
+    <form method="post" asp-page-handler="Open" class="inhoud">
+        <div class="zone">
+            <div class="zkop"><span>Restaurant</span></div>
+            <div class="grid-t">
+                @foreach (TableStatus status in Model.Tables)
+                {
+                    <partial name="_TableTile" model="status" />
+                }
+            </div>
+        </div>
+        <div class="tafelbalk">
+            <div class="tb"><span class="info"><b>Drankrekeningen</b><i>voor een grote groep</i></span></div>
+            @foreach (TableStatus status in Model.DrinksBills)
+            {
+                <button type="submit" name="tableId" value="@status.Table.Id" class="tb">
+                    <span class="tag">@status.Table.Name</span>
+                    <span class="info"><b>@(status.IsOpen ? "open" : "vrij")</b></span>
+                </button>
+            }
+        </div>
+    </form>
+</main>

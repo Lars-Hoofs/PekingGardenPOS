@@ -1,0 +1,16 @@
+@model TableStatus
+
+@if (Model.Order == null)
+{
+<button type="submit" name="tableId" value="@Model.Table.Id" class="tafel vrij">
+    <b>@Model.Table.Name</b>
+    <span class="st">vrij</span>
+</button>
+}
+else
+{
+<button type="submit" name="tableId" value="@Model.Table.Id" class="tafel bezet">
+    <b>@Model.Table.Name</b>
+    <span class="st">geopend @Model.Order.OpenedAt.ToString("HH:mm")</span>
+</button>
+}
